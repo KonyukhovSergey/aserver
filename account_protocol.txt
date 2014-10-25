@@ -1,26 +1,26 @@
 ﻿server			client
 
 salt
-			login, md5(pass+salt)
+			login;md5(pass+salt)
 welcome
 ----
 
 salt
-			login, md5(pass+salt)
+			login;md5(pass+salt)
 wrong pass
 ----
 
 salt
-			login, md5(pass+salt)
-regme,captcha
-			md5(pass), captcha
+			login;md5(pass+salt)
+regme:captcha
+			md5(pass);captcha
 welcome
 ----
 
 salt
-			login, md5(pass+salt)
-regme,captcha
-			md5(pass), captcha
+			login;md5(pass+salt)
+regme:captcha
+			md5(pass);captcha
 wrong captcha
 ----
 

@@ -62,8 +62,8 @@ public class Account implements MessageListener
 			}
 			else
 			{
-				captcha = "regme:captcha";
-				client.send(captcha);
+				captcha = "captcha";
+				client.send("regme:" + captcha);
 				state = 1;
 			}
 			break;
