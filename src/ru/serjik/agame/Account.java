@@ -24,7 +24,7 @@ public class Account implements MessageListener
 		client.send(salt);
 	}
 
-	private transient int state = 0;
+	private transient states state = states.LOGIN_PASSH;
 
 	private transient String captcha;
 	private transient String salt;
@@ -42,7 +42,7 @@ public class Account implements MessageListener
 
 		switch (state)
 		{
-		case 0:
+		case LOGIN_PASSH:
 			login = values[0];
 			passh = values[1];
 
@@ -57,29 +57,29 @@ public class Account implements MessageListener
 				else
 				{
 					client.send("wrong pass");
-					state = 2;
+					state = states.FINISH;
 				}
 			}
 			else
 			{
 				captcha = "captcha";
 				client.send("regme:" + captcha);
-				state = 1;
+				state = states.PASSH_CAPTCHA;
 			}
 			break;
 
-		case 1:
+		case PASSH_CAPTCHA:
 			passh = values[0];
 
 			if (Files.exists(profilePath()))
 			{
 				client.send("login exists");
-				state = 2;
+				state = states.FINISH;
 			}
 			else if (false == captcha.equals(values[1]))
 			{
 				client.send("wrong captcha");
-				state = 2;
+				state = states.FINISH;
 			}
 			else
 			{
@@ -91,6 +91,10 @@ public class Account implements MessageListener
 				file.save(profilePath(), json.to(this));
 				welcome(client);
 			}
+			break;
+
+		case FINISH:
+			client.close();
 			break;
 		}
 	}
@@ -125,4 +129,8 @@ public class Account implements MessageListener
 		return Paths.get(Server.pathData, "users", login, "profile.json");
 	}
 
+	private enum states
+	{
+		LOGIN_PASSH, PASSH_CAPTCHA, FINISH
+	}
 }
