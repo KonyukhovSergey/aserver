@@ -50,7 +50,7 @@ public class Account implements MessageListener
 			{
 				Account etalon = json.from(file.load(profilePath()), Account.class);
 
-				if (passh.equals(etalon.passh + salt))
+				if (passh.equals(md5.get(etalon.passh + salt)))
 				{
 					welcome(client);
 				}
