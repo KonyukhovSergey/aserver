@@ -1,0 +1,16 @@
+from server to client:
+
+	/ - command
+
+	/add;type;id
+		player: +	nick;q;r;direction;
+	/del;id - remove from visibility list
+	/ctl;mf|mb|rr|rl
+	/msg;text
+
+from client to cerver:
+
+	/ctl;...
+	
+
+ 

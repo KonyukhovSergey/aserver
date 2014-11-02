@@ -16,11 +16,12 @@ public class Server implements NioNetServerListener
 	public static String pathData;
 	private NioNetServer server;
 	private ServerConfig config;
+	private static int lastId = 0;
 
 	public Server(String pathData) throws IOException
 	{
 		Server.pathData = pathData;
-		config = json.from(file.load(configPath()), ServerConfig.class);
+		config = json.parse(file.load(configPath()), ServerConfig.class);
 		server = new NioNetServer(config.port, this);
 	}
 
@@ -76,7 +77,7 @@ public class Server implements NioNetServerListener
 	@Override
 	public void onMessage(ClientData client, String message)
 	{
-		System.out.println(client.toString() + ": " + message);
+		// System.out.println(client.toString() + ": " + message);
 		client.tag.onMessage(client, message);
 	}
 
@@ -84,13 +85,19 @@ public class Server implements NioNetServerListener
 	public void onDisconnect(ClientData client)
 	{
 		System.out.println("disconnect: " + client.toString());
-		
+
 		if (client.tag instanceof Player)
 		{
 			Player player = (Player) client.tag;
-			world.players.remove(player);
-			world.broadcast("system: " + player.name + " has disconnected");
+			player.save();
+			World.instance.remove(player);
+			World.instance.broadcast("system: " + player.name + " has disconnected");
 		}
+	}
+
+	public static int getNextId()
+	{
+		return lastId++;
 	}
 
 	private Path configPath()

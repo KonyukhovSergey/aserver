@@ -48,7 +48,7 @@ public class Account implements MessageListener
 
 			if (Files.exists(profilePath()))
 			{
-				Account etalon = json.from(file.load(profilePath()), Account.class);
+				Account etalon = json.parse(file.load(profilePath()), Account.class);
 
 				if (passh.equals(md5.get(etalon.passh + salt)))
 				{
@@ -88,7 +88,7 @@ public class Account implements MessageListener
 					client.close();
 					return;
 				}
-				file.save(profilePath(), json.to(this));
+				file.save(profilePath(), json.from(this));
 				welcome(client);
 			}
 			break;
@@ -102,8 +102,8 @@ public class Account implements MessageListener
 	private void welcome(ClientData client)
 	{
 		client.send("welcome");
-		world.broadcast("system: " + login + " has joined");
-		world.players.add(new Player(login, client));
+		World.instance.broadcast("system: " + login + " has joined");
+		World.instance.add(Player.instatiate(login, client));
 	}
 
 	private boolean ensureAccountFolder()
