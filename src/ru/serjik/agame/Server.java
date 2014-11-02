@@ -35,6 +35,17 @@ public class Server implements NioNetServerListener
 		{
 			return false;
 		}
+		else if (cmd.startsWith("spawn;"))
+		{
+			try
+			{
+				World.instance.add(new GameItem(cmd.split(";")));
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
 
 		return true;
 	}

@@ -17,4 +17,9 @@ public class HexLocation
 		q += HexUtils.dq[direction] * deltaForward;
 		r += HexUtils.dr[direction] * deltaForward;
 	}
+
+	public String location()
+	{
+		return ";" + q + ";" + r + ";" + direction;
+	}
 }
